@@ -1,0 +1,32 @@
+version: '2'
+
+networks:
+  backend-coding-challenge-network:
+    driver: bridge
+
+services:
+  backend:
+    container_name: backend-coding-challenge
+    build:
+      context: ./
+    environment:
+      DATABASE_URL: mysql://root:passwd@mysql/db
+      PYTHONPATH: /challenge
+    volumes:
+        - .:/challenge
+    working_dir: /challenge
+    tty: true
+    stdin_open: true
+    networks:
+      - backend-coding-challenge-network
+
+  mysql:
+    container_name: backend-coding-challenge-mysql
+    image: mysql:5.7
+    environment:
+        MYSQL_DATABASE: db
+        MYSQL_ROOT_PASSWORD: passwd
+    tty: true
+    stdin_open: true
+    networks:
+      - backend-coding-challenge-network
